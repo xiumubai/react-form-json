@@ -41,6 +41,16 @@ export interface FormApiConfig {
   headers?: Record<string, string>;
 }
 
+// API配置
+export interface ApiConfig {
+  url: string;
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  headers?: Record<string, string>;
+  transformRequest?: ((data: any) => any) | string;
+  onSuccess?: ((response: any, form: any) => void) | string;
+  onError?: ((error: any, form: any) => void) | string;
+}
+
 // 表单布局配置
 export interface FormLayoutConfig {
   type?: FormLayoutType;
