@@ -1,0 +1,327 @@
+# 产品信息表单配置
+formId: product-form
+name: product-form
+title: 产品信息表单
+description: 用于创建或编辑产品信息的表单
+layout: tabs
+labelWidth: 120
+
+# 表单字段定义
+fields:
+  - name: basic
+    type: group
+    title: 基本信息
+    tab: 基本信息
+    fields:
+      - name: name
+        type: input
+        label: 产品名称
+        placeholder: 请输入产品名称
+        required: true
+        rules:
+          - required: true
+            message: 请输入产品名称
+          - min: 2
+            max: 100
+            message: 产品名称长度必须在2-100个字符之间
+
+      - name: code
+        type: input
+        label: 产品编码
+        placeholder: 请输入产品编码
+        required: true
+        rules:
+          - required: true
+            message: 请输入产品编码
+          - pattern: '^[A-Z0-9]{3,20}$'
+            message: 产品编码必须为3-20位大写字母和数字组合
+
+      - name: category
+        type: select
+        label: 产品分类
+        placeholder: 请选择产品分类
+        required: true
+        showSearch: true
+        allowClear: true
+        options: remote:categories
+        rules:
+          - required: true
+            message: 请选择产品分类
+
+      - name: brand
+        type: select
+        label: 品牌
+        placeholder: 请选择品牌
+        showSearch: true
+        allowClear: true
+        options: remote:brands
+
+      - name: status
+        type: radio
+        label: 状态
+        options:
+          - label: 上架
+            value: active
+          - label: 下架
+            value: inactive
+          - label: 待审核
+            value: pending
+        defaultValue: pending
+        buttonStyle: solid
+
+      - name: tags
+        type: select
+        label: 标签
+        placeholder: 请选择标签
+        mode: multiple
+        allowClear: true
+        options: remote:tags
+
+  - name: price
+    type: group
+    title: 价格信息
+    tab: 价格信息
+    fields:
+      - name: price
+        type: number
+        label: 售价
+        placeholder: 请输入售价
+        required: true
+        props:
+          min: 0
+          step: 0.01
+          formatter: value => `¥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          parser: value => value.replace(/¥\s?|(,*)/g, '')
+        rules:
+          - required: true
+            message: 请输入售价
+          - type: number
+            message: 请输入有效的价格
+
+      - name: originalPrice
+        type: number
+        label: 原价
+        placeholder: 请输入原价
+        props:
+          min: 0
+          step: 0.01
+          formatter: value => `¥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          parser: value => value.replace(/¥\s?|(,*)/g, '')
+
+      - name: costPrice
+        type: number
+        label: 成本价
+        placeholder: 请输入成本价
+        props:
+          min: 0
+          step: 0.01
+          formatter: value => `¥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          parser: value => value.replace(/¥\s?|(,*)/g, '')
+
+      - name: discount
+        type: switch
+        label: 启用折扣
+        defaultValue: false
+        checkedText: 是
+        uncheckedText: 否
+
+      - name: discountRate
+        type: slider
+        label: 折扣率
+        visible: formValues.discount === true
+        props:
+          min: 1
+          max: 99
+          step: 1
+          formatter: value => `${value}%`
+        defaultValue: 90
+
+  - name: inventory
+    type: group
+    title: 库存信息
+    tab: 库存信息
+    fields:
+      - name: sku
+        type: input
+        label: SKU
+        placeholder: 请输入SKU
+        required: true
+        rules:
+          - required: true
+            message: 请输入SKU
+
+      - name: stock
+        type: number
+        label: 库存数量
+        placeholder: 请输入库存数量
+        required: true
+        props:
+          min: 0
+          precision: 0
+        rules:
+          - required: true
+            message: 请输入库存数量
+          - type: integer
+            message: 库存必须为整数
+
+      - name: unit
+        type: select
+        label: 计量单位
+        placeholder: 请选择计量单位
+        options:
+          - label: 个
+            value: piece
+          - label: 件
+            value: item
+          - label: 箱
+            value: box
+          - label: 千克
+            value: kg
+          - label: 升
+            value: liter
+        defaultValue: piece
+
+      - name: lowStockAlert
+        type: switch
+        label: 库存预警
+        defaultValue: true
+        checkedText: 开启
+        uncheckedText: 关闭
+
+      - name: lowStockThreshold
+        type: number
+        label: 预警阈值
+        placeholder: 请输入预警阈值
+        visible: formValues.lowStockAlert === true
+        props:
+          min: 1
+          precision: 0
+        defaultValue: 10
+
+  - name: details
+    type: group
+    title: 详细信息
+    tab: 详细信息
+    fields:
+      - name: description
+        type: textarea
+        label: 产品描述
+        placeholder: 请输入产品描述
+        rows: 4
+
+      - name: specifications
+        type: list
+        label: 规格参数
+        addText: 添加规格
+        items:
+          - name: name
+            type: input
+            placeholder: 参数名称
+            rules:
+              - required: true
+                message: 请输入参数名称
+          - name: value
+            type: input
+            placeholder: 参数值
+            rules:
+              - required: true
+                message: 请输入参数值
+
+      - name: images
+        type: upload
+        label: 产品图片
+        listType: picture-card
+        action: /api/upload
+        accept: image/*
+        multiple: true
+        maxCount: 5
+        buttonText: 上传图片
+
+# 表单按钮定义
+buttons:
+  - text: 取消
+    type: default
+    action: cancel
+    onClick: (form) => { history.goBack(); }
+
+  - text: 重置
+    type: default
+    action: reset
+
+  - text: 保存草稿
+    type: dashed
+    action: custom
+    onClick: |
+      async (form) => {
+        const values = await form.validateFields();
+        values.status = 'draft';
+        // 保存草稿逻辑
+        message.success('草稿已保存');
+      }
+
+  - text: 提交
+    type: primary
+    action: submit
+    loading: "{{submitting}}"
+
+# API配置
+api:
+  url: /api/products
+  method: POST
+  headers:
+    Content-Type: application/json
+  transformRequest: |
+    data => {
+      // 转换请求数据
+      if (data.specifications && data.specifications.length > 0) {
+        data.specificationsObj = {};
+        data.specifications.forEach(spec => {
+          data.specificationsObj[spec.name] = spec.value;
+        });
+      }
+      return data;
+    }
+  onSuccess: |
+    (response, form) => {
+      message.success('保存成功');
+      history.push('/products');
+    }
+  onError: |
+    (error, form) => {
+      message.error('保存失败: ' + error.message);
+    }
+
+# 插件配置
+plugins:
+  - name: storage
+    options:
+      storageType: localStorage
+      key: product-form-data
+      autoLoad: true
+      autoSave: true
+      expireTime: 86400000
+
+  - name: remoteData
+    options:
+      dataSources:
+        - name: categories
+          url: /api/categories
+          method: GET
+          dataPath: data.list
+          valueField: id
+          labelField: name
+          cacheTime: 3600000
+        - name: brands
+          url: /api/brands
+          method: GET
+          dataPath: data.list
+          valueField: id
+          labelField: name
+          cacheTime: 3600000
+        - name: tags
+          url: /api/tags
+          method: GET
+          dataPath: data
+          valueField: id
+          labelField: name
+          cacheTime: 3600000

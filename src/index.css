@@ -1,0 +1,103 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* 表单相关样式 */
+.dynamic-form-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dynamic-form-tabs .ant-tabs-nav {
+  margin-bottom: 24px;
+}
+
+.dynamic-form-steps .ant-steps {
+  margin-bottom: 24px;
+}
+
+.dynamic-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.dynamic-form-buttons {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.dynamic-form-group {
+  margin-bottom: 24px;
+  border: 1px solid #f0f0f0;
+  border-radius: 2px;
+  padding: 16px;
+}
+
+.dynamic-form-group-title {
+  margin-bottom: 16px;
+  font-weight: 500;
+  font-size: 16px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 8px;
+}
+
+/* 列表字段样式 */
+.dynamic-form-list-item {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 8px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 2px;
+}
+
+.dynamic-form-list-item-fields {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+}
+
+.dynamic-form-list-item-field {
+  flex: 1;
+}
+
+.dynamic-form-list-item-remove {
+  align-self: center;
+}
+
+/* 加载状态样式 */
+.dynamic-form-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+  .dynamic-form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dynamic-form-list-item-fields {
+    flex-direction: column;
+  }
+  
+  .dynamic-form-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

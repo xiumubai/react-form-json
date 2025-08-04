@@ -1,0 +1,284 @@
+{
+  "formId": "user-form",
+  "name": "user-form",
+  "title": "用户信息表单",
+  "description": "用于创建或编辑用户信息的表单",
+  "layout": "vertical",
+  "labelWidth": 120,
+  "fields": [
+    {
+      "name": "basic",
+      "type": "group",
+      "title": "基本信息",
+      "fields": [
+        {
+          "name": "username",
+          "type": "input",
+          "label": "用户名",
+          "placeholder": "请输入用户名",
+          "required": true,
+          "rules": [
+            { "required": true, "message": "请输入用户名" },
+            { "min": 3, "max": 20, "message": "用户名长度必须在3-20个字符之间" }
+          ]
+        },
+        {
+          "name": "password",
+          "type": "password",
+          "label": "密码",
+          "placeholder": "请输入密码",
+          "required": true,
+          "rules": [
+            { "required": true, "message": "请输入密码" },
+            { "min": 6, "message": "密码长度不能少于6个字符" },
+            { "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\\\d).+$", "message": "密码必须包含大小写字母和数字" }
+          ]
+        },
+        {
+          "name": "confirmPassword",
+          "type": "password",
+          "label": "确认密码",
+          "placeholder": "请再次输入密码",
+          "required": true,
+          "rules": [
+            { "required": true, "message": "请确认密码" },
+            { "validator": "confirmPassword", "message": "两次输入的密码不一致" }
+          ],
+          "dependencies": ["password"]
+        },
+        {
+          "name": "email",
+          "type": "input",
+          "label": "邮箱",
+          "placeholder": "请输入邮箱",
+          "required": true,
+          "rules": [{ "type": "email", "message": "请输入有效的邮箱地址" }]
+        },
+        {
+          "name": "phone",
+          "type": "input",
+          "label": "手机号",
+          "placeholder": "请输入手机号",
+          "rules": [{ "type": "phone", "message": "请输入有效的手机号码" }]
+        }
+      ]
+    },
+    {
+      "name": "profile",
+      "type": "group",
+      "title": "个人资料",
+      "fields": [
+        {
+          "name": "nickname",
+          "type": "input",
+          "label": "昵称",
+          "placeholder": "请输入昵称"
+        },
+        {
+          "name": "gender",
+          "type": "radio",
+          "label": "性别",
+          "options": [
+            { "label": "男", "value": "male" },
+            { "label": "女", "value": "female" },
+            { "label": "其他", "value": "other" }
+          ],
+          "defaultValue": "male"
+        },
+        {
+          "name": "birthday",
+          "type": "date",
+          "label": "生日",
+          "placeholder": "请选择生日"
+        },
+        {
+          "name": "address",
+          "type": "textarea",
+          "label": "地址",
+          "placeholder": "请输入详细地址",
+          "rows": 3
+        },
+        {
+          "name": "interests",
+          "type": "checkbox",
+          "label": "兴趣爱好",
+          "options": [
+            { "label": "阅读", "value": "reading" },
+            { "label": "音乐", "value": "music" },
+            { "label": "电影", "value": "movie" },
+            { "label": "运动", "value": "sports" },
+            { "label": "旅行", "value": "travel" },
+            { "label": "美食", "value": "food" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "work",
+      "type": "group",
+      "title": "工作信息",
+      "fields": [
+        {
+          "name": "company",
+          "type": "input",
+          "label": "公司名称",
+          "placeholder": "请输入公司名称"
+        },
+        {
+          "name": "department",
+          "type": "select",
+          "label": "部门",
+          "placeholder": "请选择部门",
+          "options": "remote:departments",
+          "showSearch": true,
+          "allowClear": true
+        },
+        {
+          "name": "position",
+          "type": "input",
+          "label": "职位",
+          "placeholder": "请输入职位",
+          "visible": "formValues.company !== undefined && formValues.company !== ''"
+        },
+        {
+          "name": "salary",
+          "type": "number",
+          "label": "薪资",
+          "placeholder": "请输入薪资",
+          "visible": "formValues.company !== undefined && formValues.company !== ''",
+          "props": {
+            "min": 0,
+            "max": 1000000,
+            "step": 1000,
+            "formatter": "value => `￥ ${value}`.replace(/\\B(?=(\\d{3})+(?!\\d))/g, ',')",
+            "parser": "value => value.replace(/\\￥\\s?|(,*)/g, '')"
+          }
+        },
+        {
+          "name": "skills",
+          "type": "list",
+          "label": "技能列表",
+          "addText": "添加技能",
+          "items": [
+            {
+              "name": "name",
+              "type": "input",
+              "placeholder": "技能名称",
+              "rules": [{ "required": true, "message": "请输入技能名称" }]
+            },
+            {
+              "name": "level",
+              "type": "select",
+              "placeholder": "熟练度",
+              "options": [
+                { "label": "入门", "value": "beginner" },
+                { "label": "熟练", "value": "proficient" },
+                { "label": "精通", "value": "expert" }
+              ],
+              "rules": [{ "required": true, "message": "请选择熟练度" }]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "settings",
+      "type": "group",
+      "title": "账户设置",
+      "fields": [
+        {
+          "name": "notifications",
+          "type": "switch",
+          "label": "接收通知",
+          "defaultValue": true,
+          "checkedText": "开启",
+          "uncheckedText": "关闭"
+        },
+        {
+          "name": "newsletter",
+          "type": "checkbox",
+          "label": "订阅邮件",
+          "defaultValue": false,
+          "disabled": "!formValues.notifications"
+        },
+        {
+          "name": "language",
+          "type": "select",
+          "label": "语言偏好",
+          "placeholder": "请选择语言",
+          "options": [
+            { "label": "简体中文", "value": "zh-CN" },
+            { "label": "English", "value": "en-US" },
+            { "label": "日本語", "value": "ja-JP" }
+          ],
+          "defaultValue": "zh-CN"
+        },
+        {
+          "name": "theme",
+          "type": "radio",
+          "label": "主题",
+          "options": [
+            { "label": "浅色", "value": "light" },
+            { "label": "深色", "value": "dark" },
+            { "label": "跟随系统", "value": "auto" }
+          ],
+          "defaultValue": "auto",
+          "buttonStyle": "solid"
+        }
+      ]
+    }
+  ],
+  "buttons": [
+    {
+      "text": "重置",
+      "type": "default",
+      "action": "reset"
+    },
+    {
+      "text": "保存",
+      "type": "primary",
+      "action": "submit",
+      "loading": "{{submitting}}"
+    }
+  ],
+  "api": {
+    "url": "/api/users",
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "transformRequest": "data => { delete data.confirmPassword; return data; }",
+    "onSuccess": "(response, form) => { message.success('保存成功'); }",
+    "onError": "(error, form) => { message.error('保存失败: ' + error.message); }"
+  },
+  "plugins": [
+    {
+      "name": "storage",
+      "options": {
+        "storageType": "localStorage",
+        "key": "user-form-data",
+        "autoLoad": true,
+        "autoSave": true,
+        "excludeFields": ["password", "confirmPassword"],
+        "expireTime": 86400000
+      }
+    },
+    {
+      "name": "remoteData",
+      "options": {
+        "dataSources": [
+          {
+            "name": "departments",
+            "url": "/api/departments",
+            "method": "GET",
+            "dataPath": "data.list",
+            "valueField": "id",
+            "labelField": "name",
+            "cacheTime": 3600000
+          }
+        ],
+        "autoLoad": true
+      }
+    }
+  ]
+}
